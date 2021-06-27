@@ -1,7 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\HomeController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -13,6 +14,21 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
+Route::get('/admin', function () {
     return view('dashboardAdmin', ['title' => 'Dasboar Admin | Fish Koi']);
+});
+
+Route::get('/','App\Http\Controllers\DataBarangController@index');
+// Route::get('/', [DataBarangController::class, 'index']);
+
+Route::get('/', 'App\Http\Controllers\DataBarangController@index');
+Route::get('login', [AuthController::class, 'showFormLogin'])->name('login');
+Route::post('login', [AuthController::class, 'login']);
+Route::get('register', [AuthController::class, 'showFormRegister'])->name('register');
+Route::post('register', [AuthController::class, 'register']);
+
+Route::group(['middleware' => 'auth'], function () {
+
+    // Route::get('/home','App\Http\Controllers\DataBarangController@index')->name('home');
+    Route::get('logout', [AuthController::class, 'logout'])->name('logout');
 });
